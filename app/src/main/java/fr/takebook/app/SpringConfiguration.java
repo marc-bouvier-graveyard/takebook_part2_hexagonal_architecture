@@ -15,54 +15,33 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-
 @SpringBootApplication
 @ComponentScan({"fr.takebook"})
 @EntityScan({
         "fr.takebook.data.infrastructure.out.persistence.entity",
-        "fr.takebook.library.infrastructure.out.persistence.entity",
-        "fr.takebook.user.infrastructure.out.persistence.entity"
+        "fr.takebook.user.infrastructure.out.persistence.entity",
+        "fr.takebook.library.infrastructure.out.persistence.entity"
 })
 @EnableJpaRepositories({
         "fr.takebook.data.infrastructure.out.persistence.repository",
-        "fr.takebook.library.infrastructure.out.persistence.repository",
-        "fr.takebook.user.infrastructure.out.persistence.repository"
+        "fr.takebook.user.infrastructure.out.persistence.repository",
+        "fr.takebook.library.infrastructure.out.persistence.repository"
 })
 public class SpringConfiguration {
 
-    @Autowired
-    private UserSpringRepository userSpringRepository;
-
-    @Autowired
-    private DataBookOutputAdapter dataBookOutputAdapter;
-
-    @Autowired
-    private LibraryBookOutputAdapter libraryBookOutputAdapter;
+    @Bean
+    public UserInputPort userInputPort(UserOutputAdapter userOutputAdapter) {
+        return new UserInputPort(userOutputAdapter);
+    }
 
     @Bean
-    @DependsOn({"dataBookOutputAdapter"})
-    public DataBookInputPort dataBookInputPort() {
+    public DataBookInputPort dataBookInputPort(DataBookOutputAdapter dataBookOutputAdapter) {
         return new DataBookInputPort(dataBookOutputAdapter);
     }
 
     @Bean
-    @DependsOn({"libraryBookOutputAdapter"})
-    public LibraryBookInputPort libraryBookInputPort() {
+    public LibraryBookInputPort libraryBookInputPort(LibraryBookOutputAdapter libraryBookOutputAdapter) {
         return new LibraryBookInputPort(libraryBookOutputAdapter);
     }
-
-    @Bean
-    @DependsOn({"userSpringRepository"})
-    public UserOutputAdapter userOutputAdapter() {
-        return new UserOutputAdapter(userSpringRepository);
-    }
-
-    @Bean
-    @DependsOn("userOutputAdapter")
-    public UserInputPort userInputPort() {
-        return new UserInputPort(userOutputAdapter());
-    }
-
-
 
 }

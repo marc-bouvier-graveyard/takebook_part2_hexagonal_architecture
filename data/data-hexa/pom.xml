@@ -4,7 +4,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>data-hexa</artifactId>
 
-
     <parent>
         <groupId>fr.lapausedev.takebook</groupId>
         <artifactId>data</artifactId>

@@ -16,7 +16,7 @@ import java.util.stream.StreamSupport;
 public class DataBookOutputAdapter implements DataBookOutputPort {
 
     @Autowired
-    private DataBookSpringRepository springRepository;
+    private DataBookSpringRepository repository;
 
     @Autowired
     private DataBookEntityWrapper assembler;
@@ -24,13 +24,13 @@ public class DataBookOutputAdapter implements DataBookOutputPort {
     @Override
     public Stream<DataBook> findAll() {
         return StreamSupport
-                .stream(springRepository.findAll().spliterator(), false)
+                .stream(repository.findAll().spliterator(), false)
                 .map(entity -> assembler.toModel(entity));
     }
 
     @Override
     public Optional<DataBook> findById(UUID id) {
-        return springRepository.findById(id)
+        return repository.findById(id)
                 .map(entity -> assembler.toModel(entity));
     }
 

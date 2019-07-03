@@ -25,7 +25,7 @@ import java.util.stream.StreamSupport;
 public class LibraryBookOutputAdapter implements LibraryBookOutputPort {
 
     @Autowired
-    private LibraryBookSpringRepository outputPort;
+    private LibraryBookSpringRepository repository;
 
     @Autowired
     private DataBookInputPort dataBookInputPort;
@@ -44,7 +44,7 @@ public class LibraryBookOutputAdapter implements LibraryBookOutputPort {
 
     @Override
     public Optional<LibraryBook> findById(UUID id) {
-        return outputPort.findById(id)
+        return repository.findById(id)
                 .map(entity -> fromEntityWithDataAndUser(entity));
     }
 
@@ -52,14 +52,14 @@ public class LibraryBookOutputAdapter implements LibraryBookOutputPort {
     @Override
     public Stream<LibraryBook> findByBorrower(LibraryBorrower borrower) {
         return StreamSupport
-                .stream(outputPort.findByBorrowerId(borrower.getId()).spliterator(), false)
+                .stream(repository.findByBorrowerId(borrower.getId()).spliterator(), false)
                 .map(entity -> fromEntityWithDataAndUser(entity));
     }
 
     @Override
     public Stream<LibraryBook> findAll() {
         return StreamSupport
-                .stream(outputPort.findAll().spliterator(), false)
+                .stream(repository.findAll().spliterator(), false)
                 .map(entity -> fromEntityWithDataAndUser(entity));
     }
 
@@ -77,7 +77,7 @@ public class LibraryBookOutputAdapter implements LibraryBookOutputPort {
 
     @Override
     public void update(LibraryBook book) {
-        outputPort.save(libraryBookWrapper.toEntity(book));
+        repository.save(libraryBookWrapper.toEntity(book));
     }
 
 
